@@ -8,7 +8,7 @@ const productsController = require('../controllers/products-controller');
 const router = express.Router();
 
 // products paths and controllers
-router.get('/all', productsController.getAllProducts);
+router.get('', productsController.getAllProducts);
 router.get('/:productId', productsController.getProductById);
 
 module.exports = router;
