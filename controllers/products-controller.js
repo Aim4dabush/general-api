@@ -9,13 +9,11 @@ exports.getAllProducts = async (req, res, next) => {
         res.status(200).send({
             data: products,
             message: 'Products fetch successful',
-            fetch: true
         });
     } catch(err) {
         res.status(400).send({
             data: null,
-            message: err.message,
-            fetch: false
+            message: err.message
         });
     }
 };
@@ -32,16 +30,14 @@ exports.getProductById = async (req, res, next) => {
             .status(200)
             .send({
                 data: product,
-                message: 'Product fetch successful',
-                fetch: true
+                message: 'Product fetch successful'
             });
     } catch(err) {
         res
             .status(400)
             .send({
                 data: null,
-                message: err.message,
-                fetch: false
+                message: err.message
             });
     }
 };
