@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 // routes
 const productsRoute = require('./routes/products-route');
+const userRoute = require('./routes/user-route');
 
 // express app
 const app = express();
@@ -24,7 +25,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// products
 app.use('/products', productsRoute);
+
+// users
+app.use('/user', userRoute);
 
 // connect to mongodb with mongoose
 mongoose.connect('mongodb+srv://Aim4dabush:talofa007@store.glumqju.mongodb.net/general-store?retryWrites=true&w=majority')
