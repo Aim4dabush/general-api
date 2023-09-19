@@ -1,7 +1,10 @@
+// 3rd party packages
 const express = require('express');
 
+// controllers
 const userController = require('../controllers/user-controller');
 
+// express router
 const router = express.Router();
 
 // shopping cart paths and controllers
