@@ -9,11 +9,12 @@ const userSchema = new Schema({
         street: String,
         zipCode: Number
     },
-    birthday: {type: Date, required: true},
+    birthday: Date,
     email: {type: String, required: true},
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
     password: {type: String, required: true},
+    phoneNumber: String,
     shoppingCart: [
         {
             _id: false,
@@ -21,7 +22,6 @@ const userSchema = new Schema({
             quantity: {type: Number, required: true}
         }
     ],
-    username: {type: String, required: true},
     wishList: [
         {
             _id: false,

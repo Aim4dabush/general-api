@@ -9,12 +9,10 @@ exports.createNewUser = async (req, res) => {
     try{
         const hashPassword = await bcrypt.hash(req.body.password, 10);
         const user = new User({
-            birthday: req.body.birthday,
             email: req.body.email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             password: hashPassword,
-            username: req.body.username
         });
 
         await user.save();
@@ -230,7 +228,7 @@ exports.manageWishListProduct = async (req, res) => {
     }
 };
 
-//PUT update user profile
+// PATCH update user profile
 exports.updateUserProfile = async (req, res) => {
     try{
         const user = await User.findByIdAndUpdate(req.user, req.body, {new: true});
