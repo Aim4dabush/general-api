@@ -1,6 +1,12 @@
 const {Schema, default: mongoose} = require('mongoose');
 
 const userSchema = new Schema({
+    address: {
+        city: String,
+        state: String,
+        street: String,
+        zipCode: Number
+    },
     birthday: {type: Date, required: true},
     email: {type: String, required: true},
     firstName: {type: String, required: true},
