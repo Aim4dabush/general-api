@@ -29,7 +29,10 @@ app.use((req, res, next) => {
 app.use('/products', productsRoute);
 
 // users
-app.use('/user', userRoute);
+app.use('/user/:userId', (req, res, next) => {
+    req.user = req.params.userId;
+    next();
+}, userRoute);
 
 // connect to mongodb with mongoose
 mongoose.connect('mongodb+srv://Aim4dabush:talofa007@store.glumqju.mongodb.net/general-store?retryWrites=true&w=majority')
