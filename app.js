@@ -1,8 +1,8 @@
 // 3rd party packages
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 
 // routes
 const productsRoute = require('./routes/products-route');
@@ -37,7 +37,7 @@ app.use('/user/:userId', (req, res, next) => {
 }, userRoute);
 
 // connect to mongodb with mongoose
-mongoose.connect('mongodb+srv://Aim4dabush:talofa007@store.glumqju.mongodb.net/general-store?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
         app.listen(PORT);
         console.log(`Server listening on port ${PORT}`);
