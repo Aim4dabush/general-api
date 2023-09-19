@@ -229,3 +229,26 @@ exports.manageWishListProduct = async (req, res) => {
             })
     }
 };
+
+//PUT update user profile
+exports.updateUserProfile = async (req, res) => {
+    try{
+        const user = await User.findByIdAndUpdate(req.user, req.body, {new: true});
+
+        await user.save();
+
+        res
+            .status(200)
+            .send({
+                data: user,
+                message: `User ${user.firstName} ${user.lastName} updated`
+            });
+    } catch(err) {
+        res
+            .status(400)
+            .send({
+                data: null,
+                message: err.message
+            });
+    }
+};

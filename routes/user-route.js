@@ -11,6 +11,7 @@ router.post('/shopping-cart/:productId', userController.manageShoppingCartProduc
 // user paths and controllers
 router.get('', userController.getUserProfile);
 router.post('', userController.createNewUser);
+router.patch('', userController.updateUserProfile);
 
 // wish list paths and controllers
 router.get('/wish-list', userController.getUserWishList);
