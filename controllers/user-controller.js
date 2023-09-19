@@ -1,14 +1,19 @@
+// 3rd party packages
+const bcrypt = require('bcryptjs');
+
+// models
 const User = require('../models/user');
 
 // POST a new user
 exports.createNewUser = async (req, res) => {
     try{
+        const hashPassword = await bcrypt.hash(req.body.password, 10);
         const user = new User({
             birthday: req.body.birthday,
             email: req.body.email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            password: req.body.password,
+            password: hashPassword,
             username: req.body.username
         });
 
