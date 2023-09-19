@@ -1,3 +1,4 @@
+// models
 const Product = require('../models/product');
 
 // GET all products
