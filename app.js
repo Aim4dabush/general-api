@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 // routes
+const orderRoute = require('./routes/order-route');
 const productsRoute = require('./routes/products-route');
 const userRoute = require('./routes/user-route');
 
@@ -35,6 +36,8 @@ app.use('/user/:userId', (req, res, next) => {
     req.user = req.params.userId;
     next();
 }, userRoute);
+
+app.use('/orders', orderRoute);
 
 // connect to mongodb with mongoose
 mongoose.connect(process.env.MONGODB_URL)
