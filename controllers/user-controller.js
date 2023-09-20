@@ -36,11 +36,7 @@ exports.createNewUser = async (req, res) => {
 // GET user shopping cart
 exports.getUserShoppingCart = async (req, res) => {
     try{
-        const user = await User.findById(req.user)
-            .populate({
-                path: 'shoppingCart.product',
-                select: 'price thumbnail title'
-            })
+        const user = await User.findOne({_id: req.user});
         
         res
             .status(200)
@@ -82,11 +78,7 @@ exports.getUserProfile = async (req, res) => {
 // GET user wish list
 exports.getUserWishList = async (req, res) => {
     try{
-        const user = await User.findById(req.user)
-            .populate({
-                path: 'wishList.product',
-                select: 'price thumbnail title'
-            })
+        const user = await User.findOne({_id: req.user});
         
         res
             .status(200)
