@@ -2,7 +2,37 @@
 const bcrypt = require('bcryptjs');
 
 // models
+const Order = require('../models/order');
 const User = require('../models/user');
+
+//POST create new order
+exports.createOrder = async (req, res) => {
+    try{
+        const order = new Order({
+            items: req.body.items,
+            paymentInfo: req.body.paymentInfo,
+            shippingInfo: req.body.shippingInfo,
+            total: req.body.total,
+            user: req.user
+        });
+
+        await order.save();
+
+        res
+            .status(200)
+            .send({
+                data: order,
+                message: 'Order created'
+            })
+    } catch(err) {
+        res
+            .status(400)
+            .send({
+                data: null,
+                message: err.message
+            })
+    }
+};
 
 // POST a new user
 exports.createNewUser = async (req, res) => {
@@ -30,6 +60,48 @@ exports.createNewUser = async (req, res) => {
                 data: null,
                 message: err.message
             })
+    }
+};
+
+// DELETE delete order
+exports.deleteOrder = async (req, res) => {
+    try{
+        const order = await Order.findByIdAndDelete(req.params.orderId);
+
+        res
+            .status(200)
+            .send({
+                data: order,
+                message: `${req.params.orderId} has been deleted`
+            });
+    } catch(err) {
+        res
+            .status(200)
+            .send({
+                data: null,
+                message: err.message
+            });
+    }
+};
+
+// GET user orders
+exports.getOrders = async (req, res) => {
+    try{
+        const orders = await Order.find({user: req.user});
+
+        res
+            .status(200)
+            .send({
+                data: orders,
+                message: 'fetch successful'
+            });
+    } catch(err) {
+        res
+            .status(400)
+            .send({
+                data: null,
+                message: err.message
+            });
     }
 };
 
@@ -96,53 +168,64 @@ exports.getUserWishList = async (req, res) => {
     }
 };
 
+// POST login user
+exports.loginUser = async (req, res) => {};
+
 //POST add, delete, and update product from shopping cart
 exports.manageShoppingCartProduct = async (req, res) => {
-    const action = req.body.action;
-    const productId = req.params.productId;
+    const action = req.params.action;
+    const productId = req.body.productId;
     const quantity = req.body.quantity;
     
     try{
-        const user = await User.findById(req.user);
+        const user = await User.findOne({_id: req.user});
         const cart = [...user.shoppingCart];
-        const index = cart.findIndex(item => {
-            return item.product._id.toString() === productId;
-        });
 
-        if(action === 'add' && index < 0){
-            user.shoppingCart.push({
-                product: productId,
-                quantity
+        // if action is add and product doesn't exist then add a new product
+        if(action === 'add'){
+            // checks to see if product exists in cart
+            const index = cart.findIndex(item => {
+                return item.product._id.toString() === productId;
             });
 
-            res
-                .status(200)
-                .send({
-                    data: user,
-                    message: `Product ${productId} added to shopping cart`
-                })
-        } else {
-            user.shoppingCart[index].quantity += quantity;
+            // if product exist then update the quantity
+            if(index >= 0){
+                user.shoppingCart[index].quantity = quantity;
 
-            res
-                .status(200)
-                .send({
-                    data: user,
-                    message: `Product ${productId} updated in shopping cart`
+                res
+                    .status(200)
+                    .send({
+                        data: user.shoppingCart,
+                        message: `Product ${productId} updated in shopping cart`
+                    });
+            // else add new product
+            } else {
+                user.shoppingCart.push({
+                    product: productId,
+                    quantity
                 });
-        }
+    
+                res
+                    .status(200)
+                    .send({
+                        data: user.shoppingCart,
+                        message: `Product ${productId} added to shopping cart`
+                    })
+            }
+        } 
 
+        // if action is delete then remove product from cart
         if(action === 'delete'){
-            const wishList = cart.filter(item => {
+            const shoppingCart = cart.filter(item => {
                 return item.product._id.toString() !== productId;
             })
 
-            user.wishList = wishList;
+            user.shoppingCart = shoppingCart;
 
             res
                 .status(200)
                 .send({
-                    data: user,
+                    data: user.shoppingCart,
                     message: `Product ${productId} deleted from shopping cart`
                 });
         }
@@ -160,51 +243,59 @@ exports.manageShoppingCartProduct = async (req, res) => {
 
 // POST add, delete, and update product from wish list
 exports.manageWishListProduct = async (req, res) => {
-    const action = req.body.action;
-    const productId = req.params.productId;
+    const action = req.params.action;
+    const productId = req.body.productId;
     const quantity = req.body.quantity;
     
     try{
-        const user = await User.findById(req.user);
+        const user = await User.findOne({_id: req.user});
         const cart = [...user.wishList];
-        const index = cart.findIndex(item => {
-            return item.product._id.toString() === productId;
-        });
 
-        if(action === 'add' && index < 0){
-            user.wishList.push({
-                product: productId,
-                quantity
+        // if action is add then check if product exists
+        if(action === 'add'){
+             // checks to see if product exists in cart
+            const index = cart.findIndex(item => {
+                return item.product._id.toString() === productId;
             });
 
-            res
-                .status(200)
-                .send({
-                    data: user,
-                    message: `Product ${productId} added to wish list`
-                })
-        } else {
-            user.wishList[index].quantity = quantity;
+            // if product exist then update the quantity
+            if(index >= 0){
+                user.wishList[index].quantity = quantity;
 
-            res
-                .status(200)
-                .send({
-                    data: user,
-                    message: `Product ${productId} updated in wish list`
+                res
+                    .status(200)
+                    .send({
+                        data: user.wishlist,
+                        message: `Product ${productId} updated in wish list`
+                    });
+            // else add new product
+            } else {
+                user.wishList.push({
+                    product: productId,
+                    quantity
                 });
+    
+                res
+                    .status(200)
+                    .send({
+                        data: user.wishList,
+                        message: `Product ${productId} added to wish list`
+                    })
+            }
         }
 
+        // if action is delete then remove product from cart
         if(action === 'delete'){
             const wishList = cart.filter(item => {
                 return item.product._id.toString() !== productId;
-            })
+            });
 
             user.wishList = wishList;
 
             res
                 .status(200)
                 .send({
-                    data: user,
+                    data: user.wishList,
                     message: `Product ${productId} deleted from wish list`
                 });
         }
