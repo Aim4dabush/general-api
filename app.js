@@ -37,8 +37,6 @@ app.use('/user/:userId', (req, res, next) => {
     next();
 }, userRoute);
 
-app.use('/orders', orderRoute);
-
 // connect to mongodb with mongoose
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
