@@ -2,6 +2,7 @@
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 // routes
@@ -35,9 +36,21 @@ app.use(authRoute);
 app.use('/products', productsRoute);
 
 // users
-app.use('/user/:userId', (req, res, next) => {
-    req.user = req.params.userId;
-    next();
+app.use('/user', (req, res, next) => {
+    try{
+        const token = req.headers.authorization.split(' ')[1];
+
+        if(!token){
+            throw new Error('Auth Failed')
+        }
+
+        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+        req.user = decodedToken.id;
+        next();
+    } catch(err) {
+        console.log(err.message);
+        return next({data: null, message: err.message});
+    }
 }, userRoute);
 
 // connect to mongodb with mongoose

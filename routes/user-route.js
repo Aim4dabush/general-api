@@ -1,11 +1,14 @@
 // 3rd party packages
 const express = require('express');
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
+dotenv.config();
 
 // controllers
 const userController = require('../controllers/user-controller');
 
 // express router
-const router = express.Router();
+const router = express.Router()
 
 // order paths and controllers
 router.delete('/orders/:orderId', userController.deleteOrder)
@@ -17,7 +20,7 @@ router.get('/shopping-cart', userController.getUserShoppingCart);
 router.post('/shopping-cart/:action', userController.manageShoppingCartProduct);
 
 // user paths and controllers
-router.get('', userController.getUserProfile);
+router.get('/profile', userController.getUserProfile);
 router.patch('', userController.updateUserProfile);
 
 // wish list paths and controllers
