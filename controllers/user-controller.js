@@ -10,16 +10,16 @@ const User = require('../models/user');
 
 //POST create new order
 exports.createOrder = async (req, res) => {
+    let order;
+
     try{
-        const order = new Order({
+        order = new Order({
             items: req.body.items,
             paymentInfo: req.body.paymentInfo,
             shippingInfo: req.body.shippingInfo,
             total: req.body.total,
             user: req.user
         });
-
-        await order.save();
 
         res
             .status(200)
@@ -35,20 +35,31 @@ exports.createOrder = async (req, res) => {
                 message: err.message
             })
     }
+
+    try{
+        await order.save();
+    } catch(err) {
+        res
+            .status(400)
+            .send({
+                data: null,
+                message: err.message
+            });
+    }
 };
 
 // POST a new user
 exports.createNewUser = async (req, res) => {
+    let user;
+
     try{
         const hashPassword = await bcrypt.hash(req.body.password, 10);
-        const user = new User({
+        user = new User({
             email: req.body.email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             password: hashPassword,
         });
-
-        await user.save();
 
         res
             .status(200)
@@ -63,6 +74,17 @@ exports.createNewUser = async (req, res) => {
                 data: null,
                 message: err.message
             })
+    }
+
+    try{
+        await user.save();
+    } catch(err) {
+        res
+            .status(400)
+            .send({
+                data: null,
+                message: err.message
+            });
     }
 };
 
@@ -176,9 +198,10 @@ exports.loginUser = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     let token;
-    const user = await User.findOne({email: email});
+    let user;
     
     try{
+        user = await User.findOne({email: email});
         bcrypt.compare(user.password, password)
     } catch(err) {
         return res
@@ -207,9 +230,10 @@ exports.manageShoppingCartProduct = async (req, res) => {
     const action = req.params.action;
     const productId = req.body.productId;
     const quantity = req.body.quantity;
+    let user;
     
     try{
-        const user = await User.findOne({_id: req.user});
+        user = await User.findOne({_id: req.user});
         const cart = [...user.shoppingCart];
 
         // if action is add and product doesn't exist then add a new product
@@ -260,8 +284,6 @@ exports.manageShoppingCartProduct = async (req, res) => {
                     message: `Product ${productId} deleted from shopping cart`
                 });
         }
-
-        await user.save();
     } catch(err) {
         res
             .status(400)
@@ -270,6 +292,17 @@ exports.manageShoppingCartProduct = async (req, res) => {
                 message: err.message
             })
     }
+
+    try{
+        await user.save();
+    } catch(err) {
+        res
+            .status(400)
+            .send({
+                data: null,
+                message: err.message
+            });
+    }
 };
 
 // POST add, delete, and update product from wish list
@@ -277,9 +310,10 @@ exports.manageWishListProduct = async (req, res) => {
     const action = req.params.action;
     const productId = req.body.productId;
     const quantity = req.body.quantity;
+    let user;
     
     try{
-        const user = await User.findOne({_id: req.user});
+        user = await User.findOne({_id: req.user});
         const cart = [...user.wishList];
 
         // if action is add then check if product exists
@@ -330,8 +364,6 @@ exports.manageWishListProduct = async (req, res) => {
                     message: `Product ${productId} deleted from wish list`
                 });
         }
-
-        await user.save();
     } catch(err) {
         res
             .status(400)
@@ -340,21 +372,41 @@ exports.manageWishListProduct = async (req, res) => {
                 message: err.message
             })
     }
+
+    try{
+        await user.save();
+    } catch(err) {
+        res
+            .status(400)
+            .send({
+                data: null,
+                message: err.message
+            });
+    }
 };
 
 // PATCH update user profile
 exports.updateUserProfile = async (req, res) => {
+    let user;
     try{
-        const user = await User.findByIdAndUpdate(req.user, req.body, {new: true});
-
-        await user.save();
-
+        user = await User.findByIdAndUpdate(req.user, req.body, {new: true});
         res
             .status(200)
             .send({
                 data: user,
                 message: `User ${user.firstName} ${user.lastName} updated`
             });
+    } catch(err) {
+        res
+            .status(400)
+            .send({
+                data: null,
+                message: err.message
+            });
+    }
+
+    try{
+        await user.save();
     } catch(err) {
         res
             .status(400)
