@@ -1,5 +1,8 @@
 // 3rd party packages
 const bcrypt = require('bcryptjs');
+const dotenv = require("dotenv");
+const jwt = require('jsonwebtoken');
+dotenv.config();
 
 // models
 const Order = require('../models/order');
@@ -169,7 +172,35 @@ exports.getUserWishList = async (req, res) => {
 };
 
 // POST login user
-exports.loginUser = async (req, res) => {};
+exports.loginUser = async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    let token;
+    const user = await User.findOne({email: email});
+    
+    try{
+        bcrypt.compare(user.password, password)
+    } catch(err) {
+        return res
+                .status(401)
+                .send({data: null, message: err.message})
+    }
+
+    try{
+        token = jwt.sign({id: user._id, email: user.email}, process.env.TOKEN_SECRET, {expiresIn: '2h'});
+    } catch(err) {
+        return next({data: null, message: err.message});
+    }
+
+    res.send({
+        data: {
+            id: user._id,
+            email: user.email,
+            token: token
+        },
+        message: `${user.firstName} ${user.lastName} login successful`
+    })
+};
 
 //POST add, delete, and update product from shopping cart
 exports.manageShoppingCartProduct = async (req, res) => {

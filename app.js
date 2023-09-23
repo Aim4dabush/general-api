@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 // routes
+const authRoute = require('./routes/auth-route');
 const productsRoute = require('./routes/products-route');
 const userRoute = require('./routes/user-route');
 
@@ -26,6 +27,9 @@ app.use((req, res, next) => {
 
     next();
 });
+
+//authRoute
+app.use(authRoute);
 
 // products
 app.use('/products', productsRoute);
