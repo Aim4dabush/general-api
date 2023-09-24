@@ -48,7 +48,6 @@ app.use('/user', (req, res, next) => {
         req.user = decodedToken.id;
         next();
     } catch(err) {
-        console.log(err.message);
         return next({data: null, message: err.message});
     }
 }, userRoute);
