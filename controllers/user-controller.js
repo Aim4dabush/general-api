@@ -154,7 +154,10 @@ exports.getUserShoppingCart = async (req, res) => {
 // GET user profile by Id
 exports.getUserProfile = async (req, res) => {
     try{
-        const user = await User.findById(req.user);
+        const user = await User.findById(req.user).populate({
+            path: 'shoppingCart.product',
+            select: 'price thumbnail title'
+        });;
 
         res
             .status(200)
@@ -175,7 +178,11 @@ exports.getUserProfile = async (req, res) => {
 // GET user wish list
 exports.getUserWishList = async (req, res) => {
     try{
-        const user = await User.findOne({_id: req.user});
+        const user = await User.findById(req.user)
+                                    .populate({
+                                        path: 'wishList.product',
+                                        select: 'price thumbnail title'
+                                    });
         
         res
             .status(200)

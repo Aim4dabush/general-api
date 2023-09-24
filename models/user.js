@@ -31,11 +31,4 @@ const userSchema = new Schema({
     ]
 });
 
-userSchema.pre('findOne', function(next) {
-    this.populate('shoppingCart.product', 'price thumbnail title');
-    this.populate('wishList.product', 'price thumbnail title');
-
-    next();
-});
-
 module.exports = mongoose.model('User', userSchema);
