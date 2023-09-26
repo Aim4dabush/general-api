@@ -224,7 +224,6 @@ exports.loginUser = async (req, res) => {
 
     res.send({
         data: {
-            id: user._id,
             user,
             token
         },
