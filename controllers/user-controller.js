@@ -225,8 +225,8 @@ exports.loginUser = async (req, res) => {
     res.send({
         data: {
             id: user._id,
-            email: user.email,
-            token: token
+            user,
+            token
         },
         message: `${user.firstName} ${user.lastName} login successful`
     })
