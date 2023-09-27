@@ -2,10 +2,10 @@
 const Product = require('../models/product');
 
 // GET all products
-exports.getAllProducts = async (req, res, next) => {
+exports.getAllProducts = async (req, res) => {
     try{
         const products = await Product.find({})
-            .select('-images -discountPercentage');
+            .select('-images -discountPercentage')
 
         res.status(200).send({
             data: products,
@@ -20,7 +20,7 @@ exports.getAllProducts = async (req, res, next) => {
 };
 
 // GET a single product by _id 
-exports.getProductById = async (req, res, next) => {
+exports.getProductById = async (req, res) => {
     const productId = req.params.productId;
 
     try{
