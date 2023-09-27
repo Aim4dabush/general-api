@@ -206,13 +206,25 @@ exports.loginUser = async (req, res) => {
     const password = req.body.password;
     let token;
     let user;
-    
+
     try{
         user = await User.findOne({email: email});
-        bcrypt.compare(user.password, password)
+        console.log(user)
+    } catch(err){
+        return res
+                .status(500)
+                .send({data: null, message: err.message})
+    }
+    
+    try{
+       const match = await bcrypt.compare(password, user.password);
+
+       if(!match){
+        throw new Error('Credentials do not match');
+       }
     } catch(err) {
         return res
-                .status(401)
+                .status(500)
                 .send({data: null, message: err.message})
     }
 
@@ -222,7 +234,9 @@ exports.loginUser = async (req, res) => {
         return next({data: null, message: err.message});
     }
 
-    res.send({
+    res
+        .status(201)
+        .send({
         data: {
             user,
             token
