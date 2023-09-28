@@ -3,9 +3,13 @@ const Product = require('../models/product');
 
 // GET all products
 exports.getAllProducts = async (req, res) => {
+    const itemsPerPage = 10;
+    let products;
     try{
-        const products = await Product.find({})
+        products = await Product.find({})
             .select('-images -discountPercentage')
+            .skip((req.page - 1 ) * itemsPerPage)
+            .limit(itemsPerPage)
 
         res.status(200).send({
             data: products,

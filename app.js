@@ -33,7 +33,10 @@ app.use((req, res, next) => {
 app.use(authRoute);
 
 // products
-app.use('/products', productsRoute);
+app.use('/products', (req, res, next) => {
+    req.page = +req.query.page || 1;
+    next();
+}, productsRoute);
 
 // users
 app.use('/user', (req, res, next) => {
