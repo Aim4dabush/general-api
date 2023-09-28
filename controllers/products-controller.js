@@ -13,6 +13,7 @@ exports.getAllProducts = async (req, res) => {
 
         res.status(200).send({
             data: products,
+            pages: Math.ceil(products / itemsPerPage),
             message: 'Products fetch successful',
         });
     } catch(err) {
