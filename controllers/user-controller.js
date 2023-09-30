@@ -209,7 +209,7 @@ exports.loginUser = async (req, res) => {
 
     try{
         user = await User.findOne({email: email});
-        console.log(user)
+       
     } catch(err){
         return res
                 .status(500)
