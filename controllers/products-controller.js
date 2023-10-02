@@ -22,7 +22,7 @@ exports.getAllProducts = async (req, res) => {
         }
         
         res.status(200).send({
-            data: products,
+            products,
             pages: Math.ceil(totalProducts / itemsPerPage),
             message: 'Products fetch successful',
         });
@@ -49,7 +49,7 @@ exports.getProductById = async (req, res) => {
         res
             .status(200)
             .send({
-                data: product,
+                product,
                 message: 'Product fetch successful'
             });
     } catch(err) {
