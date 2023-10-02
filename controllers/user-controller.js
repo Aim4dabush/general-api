@@ -24,7 +24,7 @@ exports.createOrder = async (req, res) => {
         res
             .status(200)
             .send({
-                data: order,
+                order,
                 message: 'Order created'
             })
     } catch(err) {
@@ -64,7 +64,7 @@ exports.createNewUser = async (req, res) => {
         res
             .status(200)
             .send({
-                data: user,
+                user,
                 message: `User ${user.firstName} ${user.lastName} created`
             })
     } catch(err) {
@@ -96,7 +96,7 @@ exports.deleteOrder = async (req, res) => {
         res
             .status(200)
             .send({
-                data: order,
+                order,
                 message: `${req.params.orderId} has been deleted`
             });
     } catch(err) {
@@ -117,7 +117,7 @@ exports.getOrders = async (req, res) => {
         res
             .status(200)
             .send({
-                data: orders,
+                orders,
                 message: 'fetch successful'
             });
     } catch(err) {
@@ -141,7 +141,7 @@ exports.getUserShoppingCart = async (req, res) => {
         res
             .status(200)
             .send({
-                data: user.shoppingCart,
+                user: user.shoppingCart,
                 message: 'fetch shopping cart successful'
             });
     } catch(err){
@@ -162,7 +162,7 @@ exports.getUserProfile = async (req, res) => {
         res
             .status(200)
             .send({
-                data: user,
+                user,
                 message: `Fetch user ${user.firstName} ${user.lastName} successful`
             })
     } catch(err) {
@@ -187,7 +187,7 @@ exports.getUserWishList = async (req, res) => {
         res
             .status(200)
             .send({
-                data: user.wishList,
+                user: user.wishList,
                 message: 'fetch wish list successful'
             });
     } catch(err){
@@ -237,12 +237,10 @@ exports.loginUser = async (req, res) => {
     res
         .status(201)
         .send({
-        data: {
             user,
-            token
-        },
-        message: `${user.firstName} ${user.lastName} login successful`
-    })
+            token,
+            message: `${user.firstName} ${user.lastName} login successful`
+        })
 };
 
 //POST add, delete, and update product from shopping cart
@@ -270,7 +268,7 @@ exports.manageShoppingCartProduct = async (req, res) => {
                 res
                     .status(200)
                     .send({
-                        data: user.shoppingCart,
+                        user: user.shoppingCart,
                         message: `Product ${productId} updated in shopping cart`
                     });
             // else add new product
@@ -283,7 +281,7 @@ exports.manageShoppingCartProduct = async (req, res) => {
                 res
                     .status(200)
                     .send({
-                        data: user.shoppingCart,
+                        user: user.shoppingCart,
                         message: `Product ${productId} added to shopping cart`
                     })
             }
@@ -300,7 +298,7 @@ exports.manageShoppingCartProduct = async (req, res) => {
             res
                 .status(200)
                 .send({
-                    data: user.shoppingCart,
+                    user: user.shoppingCart,
                     message: `Product ${productId} deleted from shopping cart`
                 });
         }
@@ -350,7 +348,7 @@ exports.manageWishListProduct = async (req, res) => {
                 res
                     .status(200)
                     .send({
-                        data: user.wishlist,
+                        user: user.wishList,
                         message: `Product ${productId} updated in wish list`
                     });
             // else add new product
@@ -363,7 +361,7 @@ exports.manageWishListProduct = async (req, res) => {
                 res
                     .status(200)
                     .send({
-                        data: user.wishList,
+                        user: user.wishList,
                         message: `Product ${productId} added to wish list`
                     })
             }
@@ -380,7 +378,7 @@ exports.manageWishListProduct = async (req, res) => {
             res
                 .status(200)
                 .send({
-                    data: user.wishList,
+                    user: user.wishList,
                     message: `Product ${productId} deleted from wish list`
                 });
         }
@@ -413,7 +411,7 @@ exports.updateUserProfile = async (req, res) => {
         res
             .status(200)
             .send({
-                data: user,
+                user,
                 message: `User ${user.firstName} ${user.lastName} updated`
             });
     } catch(err) {
