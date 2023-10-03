@@ -40,10 +40,6 @@ app.use('/products', (req, res, next) => {
 
 // users
 app.use('/user', (req, res, next) => {
-    if(req.method === 'OPTIONS'){
-        return next();
-    }
-
     try{
         const token = req.headers.authorization.split(' ')[1];
 
