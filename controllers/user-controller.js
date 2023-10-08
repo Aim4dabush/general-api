@@ -59,6 +59,12 @@ exports.createNewUser = async (req, res) => {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             password: hashPassword,
+            address: {
+                city: req.body.city,
+                state: req.body.state,
+                street: req.body.street,
+                zipCode: req.body.zipCode
+            }
         });
 
         res
