@@ -8,7 +8,7 @@ const orderSchema = new Schema({
     paymentInfo: {
         cardCode: {type: Number, required: true},
         cardExp: {type: Date, required: true},
-        cardHolder: {type: String, required: true},
+        cardCompany: {type: String, required: true},
         cardNumber: {type: Number, required: true}
     },
     shippingInfo: {
