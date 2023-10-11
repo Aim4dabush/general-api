@@ -4,7 +4,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-    items: {type: Number, default: 1, required: true},
+    cart:[
+        {
+            _id: false,
+            product: {type: Schema.Types.ObjectId, ref: 'Product', required: true}
+        }
+    ],
     paymentInfo: {
         cardCode: {type: Number, required: true},
         cardExp: {type: Date, required: true},
