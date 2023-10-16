@@ -55,16 +55,13 @@ exports.createNewUser = async (req, res) => {
     try{
         const hashPassword = await bcrypt.hash(req.body.password, 10);
         user = new User({
+            address: req.body.address,
+            birthday: req.body.birthday,
             email: req.body.email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             password: hashPassword,
-            address: {
-                city: req.body.city,
-                state: req.body.state,
-                street: req.body.street,
-                zipCode: req.body.zipCode
-            }
+            phoneNumber: req.body.phoneNumber,
         });
 
         res
